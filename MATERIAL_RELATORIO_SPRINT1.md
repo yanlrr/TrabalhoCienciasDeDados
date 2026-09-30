@@ -1,3 +1,4 @@
+[MATERIAL_RELATORIO_SPRINT1.1.md](https://github.com/user-attachments/files/32868579/MATERIAL_RELATORIO_SPRINT1.1.md)
 # Material para Relatório - Sprint 1
 
 Este documento contém todo o material necessário para preencher as **Seções 3 e 4 (Parte 1)** do relatório seguindo o modelo fornecido.
@@ -9,11 +10,15 @@ Este documento contém todo o material necessário para preencher as **Seções 
 ### 3.1 Descrição da Base de Dados
 
 #### Nome da Base de Dados
+
 Microdados do IDD (Indicador de Diferença entre os Desempenhos) - Edição 2023
 
 #### Fonte ou Repositório de Origem
+
 INEP - Instituto Nacional de Estudos e Pesquisas Educacionais Anísio Teixeira
-URL: http://portal.inep.gov.br/
+URL: <https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos/microdados>
+
+> O arquivo de dados brutos (`Microdados_idd_2023/2.DADOS/MICRODADOS_IDD_2023_LGPD.txt`) não é versionado neste repositório. Para reproduzir a análise, baixe os microdados do IDD 2023 no portal do INEP e extraia o arquivo nesse caminho.
 
 #### Contexto e Finalidade da Base
 
@@ -27,6 +32,29 @@ O IDD mede a diferença entre o desempenho médio observado dos concluintes de u
 - Fornecer informações para políticas públicas de melhoria da educação superior
 - Orientar estudantes e famílias na escolha de cursos e instituições
 
+#### Problema Investigado e Tipo de Tarefa
+
+- **Tipo de tarefa**: **Regressão**
+- **Variável-alvo**: `NT_GER` (nota geral do concluinte), variável numérica contínua de 0 a 100
+- **Problema**: prever a nota geral do concluinte (`NT_GER`) com base nas características dos estudantes, do curso e da instituição
+- **Variáveis preditoras**:
+  - Notas do ENEM (Ciências da Natureza, Ciências Humanas, Linguagens e Códigos, Matemática)
+  - Ano de início da graduação
+  - Características do curso (código, modalidade, grupo)
+  - Características da IES (categoria administrativa, organização acadêmica)
+  - Localização geográfica (município do curso)
+- **Distribuição das classes**: não se aplica, por se tratar de uma tarefa de regressão
+
+#### Objetivo da Análise
+
+O objetivo da equipe nesta Sprint 1 é compreender a base de dados antes da modelagem:
+- Carregar e compreender a estrutura da base
+- Realizar a análise descritiva das variáveis
+- Criar visualizações (histogramas, boxplots, gráficos de dispersão, matriz de correlação)
+- Identificar padrões, relações e possíveis problemas nos dados
+
+Com isso, busca-se entender quais características do perfil de ingresso (notas do ENEM) e do contexto institucional estão associadas ao desempenho dos concluintes, preparando a construção dos modelos de regressão das próximas sprints.
+
 #### Número de Instâncias e Atributos
 
 - **Número de instâncias**: 248.889 registros (estudantes)
@@ -34,12 +62,17 @@ O IDD mede a diferença entre o desempenho médio observado dos concluintes de u
 
 #### Tipos dos Atributos
 
-**Variáveis Numéricas Contínuas** (8 variáveis):
+**Variáveis Numéricas** (8 variáveis):
+
+Contínuas:
 1. `NT_GER` - Nota Geral do IDD
 2. `ENEM_NT_CN` - Nota ENEM: Ciências da Natureza
 3. `ENEM_NT_CH` - Nota ENEM: Ciências Humanas
 4. `ENEM_NT_LC` - Nota ENEM: Linguagens e Códigos
 5. `ENEM_NT_MT` - Nota ENEM: Matemática
+
+Discretas (temporais):
+
 6. `ANO_INICIO_GRAD` - Ano de Início da Graduação
 7. `ANO_ENEM` - Ano de Realização do ENEM
 8. `NU_ANO` - Ano de Referência (2023)
@@ -66,24 +99,33 @@ O IDD mede a diferença entre o desempenho médio observado dos concluintes de u
 - Total de células: 4.728.891 (248.889 × 19)
 - Células com dados: 4.728.891 (100%)
 
-Isso indica alta qualidade dos dados fornecidos pelo INEP, com rigoroso controle de qualidade no processo de coleta e processamento.
+Há, porém, registros com nota igual a zero nas quatro áreas do ENEM, isolados do restante da distribuição, que provavelmente indicam ausência ou eliminação no exame (ver Seção 4.1.2).
 
 #### Outras Características Relevantes
 
-**Formato e Estrutura**:
+**Formato, Tamanho e Estrutura**:
 - Arquivo TXT delimitado por ponto e vírgula (;)
+- Arquivo: `MICRODADOS_IDD_2023_LGPD.txt`
+- Tamanho: aproximadamente **21 MB**
 - Codificação: Latin-1 (ISO-8859-1)
 - Primeira linha contém os nomes das variáveis (header)
-- Dados estruturados em formato tabular
+- Dados estruturados em formato tabular (uma linha por estudante)
+- Documentação e dicionário de dados disponíveis na pasta `Microdados_idd_2023/1.LEIA-ME/`
 
 **Distribuição Temporal**:
-- Anos de início de graduação: variam de 2014 a 2022
-- Anos de realização do ENEM: variam de 2013 a 2021
+- Anos de início de graduação: variam de 2009 a 2023 (concentrados em 2018 e 2019)
+- Anos de realização do ENEM: variam de 2009 a 2022 (concentrados em 2017 e 2018)
 - Representa uma amostra longitudinal de estudantes
 
 **Distribuição Geográfica**:
 - Contempla instituições de diferentes municípios brasileiros
 - Permite análises regionais e comparativas
+
+**Atributos Constantes**:
+- `NU_ANO` (sempre 2023), `TP_INSCRICAO` (sempre 1), `IN_REGULAR` (sempre 1) e `TP_INSCRICAO_ADM` (sempre 0) não variam na base e, portanto, não contribuem para a modelagem
+
+**Desbalanceamento**:
+- 95,9% dos estudantes pertencem a cursos presenciais e 4,1% a cursos a distância
 
 **Conformidade com LGPD**:
 - Dados anonimizados conforme Lei Geral de Proteção de Dados
@@ -95,255 +137,173 @@ Isso indica alta qualidade dos dados fornecidos pelo INEP, com rigoroso controle
 
 ### PARTE 1 - ANÁLISE EXPLORATÓRIA DOS DADOS
 
+A análise exploratória foi implementada em Python, em notebooks Jupyter, com as seguintes bibliotecas e versões: pandas 2.1.4, numpy 1.26.3, matplotlib 3.8.2, seaborn 0.13.1, scipy 1.11.4, jupyter 1.0.0, notebook 7.0.6 e openpyxl 3.1.2.
+
+Nos gráficos, os códigos de identificação (`CO_IES`, `CO_GRUPO`, `CO_CURSO` e `CO_MUNIC_CURSO`) aparecem ao lado das variáveis numéricas por estarem armazenados como números. Como são categóricos, suas médias, dispersões e correlações não têm interpretação de magnitude e são comentadas apenas quando revelam algo sobre a estrutura dos dados.
+
 #### 4.1.1 Estatísticas Descritivas das Variáveis Numéricas
 
 **Tabela 1: Estatísticas Descritivas - Variáveis Numéricas**
 
-| Variável | Média | Desvio Padrão | Mínimo | Q1 (25%) | Mediana | Q3 (75%) | Máximo |
-|----------|-------|---------------|--------|----------|---------|----------|--------|
-| NT_GER | ~50.0 | ~15.0 | ~0.0 | ~40.0 | ~50.0 | ~60.0 | ~100.0 |
-| ENEM_NT_CN | ~600.0 | ~80.0 | ~300.0 | ~550.0 | ~600.0 | ~650.0 | ~900.0 |
-| ENEM_NT_CH | ~620.0 | ~75.0 | ~350.0 | ~570.0 | ~620.0 | ~670.0 | ~850.0 |
-| ENEM_NT_LC | ~580.0 | ~70.0 | ~300.0 | ~540.0 | ~580.0 | ~620.0 | ~800.0 |
-| ENEM_NT_MT | ~650.0 | ~100.0 | ~300.0 | ~580.0 | ~650.0 | ~720.0 | ~950.0 |
+| Variável | Média | Mediana | Outliers (IQR) |
+|----------|-------|---------|----------------|
+| NT_GER | 50,64 | 50,60 | 0,04% |
+| ENEM_NT_CN | 547,80 | 548,60 | 0,03% |
+| ENEM_NT_CH | 586,81 | 599,60 | 0,75% |
+| ENEM_NT_LC | 555,96 | 561,90 | 1,34% |
+| ENEM_NT_MT | 594,12 | 587,40 | 0,02% |
+| ANO_INICIO_GRAD | 2018,48 | 2019 | 11,91% |
+| ANO_ENEM | 2017,27 | 2018 | 11,58% |
 
-*Nota: Valores aproximados - executar o código Python para obter valores exatos*
+*Valores obtidos dos histogramas (Figura 1) e dos boxplots (Figura 2).*
 
 **Interpretação**:
 
-1. **NT_GER (Nota Geral do IDD)**:
-   - Média em torno de 50 pontos, indicando desempenho mediano
-   - Desvio padrão significativo (~15), mostrando alta variabilidade entre estudantes
-   - Distribuição aproximadamente simétrica (média ≈ mediana)
-   - Amplitude total de 0 a 100, cobrindo todo o espectro de desempenho
-
-2. **Notas do ENEM**:
-   - **Matemática (ENEM_NT_MT)**: Apresenta maior média (~650) e maior variabilidade
-   - **Ciências Humanas (ENEM_NT_CH)**: Segunda maior média (~620)
-   - **Ciências Naturais (ENEM_NT_CN)**: Média de ~600 pontos
-   - **Linguagens (ENEM_NT_LC)**: Menor média entre as áreas (~580)
-   - Todas as áreas mostram distribuições relativamente simétricas
-
-3. **Variabilidade**:
-   - A presença de desvios padrão substanciais indica diversidade significativa nos perfis de entrada dos estudantes
-   - Essa diversidade representa tanto um desafio quanto uma oportunidade para as instituições agregarem valor
+- A nota geral (`NT_GER`) tem média de 50,64 e mediana de 50,60, valores praticamente iguais, o que indica distribuição simétrica em torno do centro da escala de 0 a 100.
+- Entre as notas do ENEM, Matemática apresenta a maior média (594,12), seguida de Ciências Humanas (586,81), Linguagens e Códigos (555,96) e Ciências da Natureza (547,80).
+- Em Ciências Humanas e em Linguagens a mediana supera a média, sinal de assimetria à esquerda; em Matemática ocorre o inverso, com leve assimetria à direita.
+- Essas diferenças de perfil de ingresso são a base sobre a qual o IDD procura medir o valor agregado pelos cursos.
 
 #### 4.1.2 Distribuições das Variáveis - Histogramas
 
-**Figura 1: Histogramas das Variáveis Numéricas**
+**Figura 1: Histogramas das Variáveis Numéricas (média em vermelho, mediana em verde)**
 
-![Histogramas](outputs/histogramas.png)
+![Histogramas](https://github.com/Lucaslust/TrabalhoCienciasDeDados/raw/main/outputs/histogramas.png)
 
 **Interpretação dos Histogramas**:
 
 1. **NT_GER (Nota Geral)**:
-   - Distribuição aproximadamente **normal** com leve assimetria à esquerda
-   - Concentração de valores na faixa **40-60 pontos**
-   - Presença de valores nas extremidades, indicando tanto excelência quanto dificuldades
-   - A forma da distribuição sugere que a maioria dos cursos agrega valor de forma moderada
+   - Distribuição unimodal, aproximadamente normal e simétrica
+   - A maior parte dos estudantes está entre 20 e 80 pontos, com poucos casos próximos de 0 ou de 100
+   - Esse formato é favorável a um problema de regressão, pois a variável-alvo cobre toda a escala sem concentração excessiva em uma faixa
 
 2. **Notas do ENEM**:
-   - **Distribuições unimodais** e relativamente simétricas
-   - **ENEM_NT_MT** (Matemática): Distribuição ligeiramente deslocada para valores mais altos
-   - **ENEM_NT_LC** (Linguagens): Distribuição mais concentrada, menor dispersão
-   - **ENEM_NT_CN e ENEM_NT_CH**: Distribuições muito similares entre si
-   - A variação indica **diversidade de perfis** de entrada nas instituições
+   - Todas as distribuições são unimodais
+   - **Matemática** é a mais dispersa, com valores que chegam perto de 1.000
+   - **Linguagens** é a mais concentrada
+   - **Ciências Humanas e Linguagens** têm cauda mais longa à esquerda; **Ciências da Natureza** é praticamente simétrica
+   - **Notas zero**: em todas as áreas há um pequeno acúmulo de registros com nota 0, isolado do restante da distribuição (que começa por volta de 300 pontos). Como a nota zero no ENEM normalmente corresponde a ausência ou eliminação, e não a desempenho real, esses registros deverão ser investigados e provavelmente tratados como valores ausentes
 
-3. **Implicações**:
-   - As distribuições normais facilitam a aplicação de técnicas estatísticas paramétricas
-   - A variabilidade observada sugere potencial para **segmentação** de perfis
-   - Não há indícios de problemas graves de qualidade de dados (ex: valores impossíveis)
+3. **Variáveis Temporais e Códigos**:
+   - `ANO_INICIO_GRAD` varia de 2009 a 2023, concentrando-se em 2018 e 2019
+   - `ANO_ENEM` varia de 2009 a 2022, concentrando-se em 2017 e 2018
+   - `NU_ANO` assume um único valor (2023)
+   - `CO_GRUPO` se divide em duas faixas de valores muito distantes (abaixo de 100 e acima de 5.700), reforçando que se trata de um identificador categórico
 
 #### 4.1.3 Identificação de Outliers - Boxplots
 
-**Figura 2: Boxplots para Identificação de Outliers**
+**Figura 2: Boxplots com o número e a proporção de outliers pelo critério do IQR**
 
-![Boxplots](outputs/boxplots.png)
+![Boxplots](https://github.com/Lucaslust/TrabalhoCienciasDeDados/raw/main/outputs/boxplots.png)
 
 **Interpretação dos Boxplots**:
 
-1. **Detecção de Outliers**:
-   - Presença de outliers em **todas as variáveis numéricas**
-   - Outliers mais proeminentes nas **notas do ENEM**, tanto superiores quanto inferiores
-   - **NT_GER** apresenta outliers principalmente nas extremidades inferiores
+1. **Variáveis de Desempenho**:
+   - A proporção de outliers é pequena
+   - **NT_GER**: 0,04% dos registros, nas duas extremidades (notas abaixo de cerca de 6 pontos e acima de 95)
+   - **Matemática (0,02%) e Ciências da Natureza (0,03%)**: quase não têm outliers
+   - **Linguagens (1,34%) e Ciências Humanas (0,75%)**: concentram outliers na parte inferior, coerente com a assimetria à esquerda observada nos histogramas
+   - Em todas as áreas do ENEM há pontos isolados em 0, os mesmos registros de nota zero já identificados
 
-2. **Análise por Variável**:
-   - **ENEM_NT_MT**: Maior quantidade de outliers superiores (estudantes excepcionais em matemática)
-   - **ENEM_NT_CN**: Outliers balanceados em ambas as extremidades
-   - **NT_GER**: Outliers inferiores podem indicar casos de baixo aproveitamento relativo
+2. **Dispersão Interquartílica**:
+   - A caixa de Matemática é a mais larga (aproximadamente de 490 a 690), confirmando a maior dispersão dessa área
+   - A caixa de `NT_GER` vai de cerca de 40 a 62 pontos
 
-3. **Dispersão Interquartílica**:
-   - Amplitudes interquartis (IQR) relativamente consistentes entre variáveis ENEM
-   - NT_GER mostra IQR menor, indicando maior concentração central
+3. **Variáveis Temporais e Códigos**:
+   - `ANO_INICIO_GRAD` (11,91%) e `ANO_ENEM` (11,58%) têm cerca de 12% de outliers, que correspondem aos estudantes que ingressaram muito antes da maioria, ou seja, alunos que levaram mais tempo para concluir o curso
+   - Nos códigos, como `CO_IES` (11,06%), os "outliers" apenas refletem a numeração das instituições e não têm significado
 
 4. **Implicações para Modelagem**:
-   - **Outliers legítimos**: Representam casos excepcionais reais (estudantes com desempenho muito acima/abaixo da média)
-   - **Não devem ser removidos automaticamente**: Contêm informação valiosa sobre extremos de desempenho
-   - **Estratégia**: Utilizar modelos robustos a outliers (ex: Random Forest, Gradient Boosting) ou técnicas de transformação (ex: winsorização)
+   - Os outliers das notas representam casos reais e raros e não devem ser removidos automaticamente
+   - A exceção são as notas zero do ENEM, que devem ser tratadas como possível dado inválido
+   - Os outliers temporais carregam informação relevante sobre o tempo de curso, que pode ser explorada como atributo derivado
 
-#### 4.1.4 Relações entre Variáveis - Gráficos de Dispersão
+#### 4.1.4 Relações entre Variáveis - Gráfico de Dispersão
 
-**Figura 3: Gráfico de Dispersão - ENEM Matemática vs Nota Geral IDD**
+**Figura 3: Dispersão entre ENEM Matemática e Nota Geral, com reta de tendência**
 
-![Scatter Plot MT vs GER](outputs/scatter_mt_vs_ger.png)
+![Scatter Plot MT vs GER](https://github.com/Lucaslust/TrabalhoCienciasDeDados/raw/main/outputs/scatter_mt_vs_ger.png)
 
-**Interpretação do Scatter Plot**:
+**Interpretação do Gráfico de Dispersão**:
 
-1. **Relação Positiva Evidente**:
-   - Correlação positiva clara entre **ENEM_NT_MT** e **NT_GER**
-   - Estudantes com notas mais altas em Matemática no ENEM tendem a ter notas mais altas no IDD
-   - A linha de tendência confirma a relação linear positiva
+1. **Relação Positiva**:
+   - A reta de tendência (y = 0,056x + 17,28) indica que cada 100 pontos a mais em Matemática no ENEM correspondem, em média, a cerca de 5,6 pontos a mais na nota geral
+   - Um estudante com 400 pontos tem nota geral esperada de aproximadamente 40; um com 800 pontos, de aproximadamente 62
 
 2. **Dispersão dos Pontos**:
-   - Dispersão considerável ao redor da linha de tendência
-   - Indica que **outros fatores além da nota de Matemática** influenciam o desempenho no IDD
-   - Variabilidade maior nas faixas intermediárias de nota ENEM
-
-3. **Padrões Observados**:
-   - **Para ENEM_NT_MT < 500**: Grande variação em NT_GER, sugerindo que fatores institucionais/pedagógicos têm papel importante
-   - **Para ENEM_NT_MT > 700**: Menor variação, indicando que alta proficiência de entrada tende a resultar em bom desempenho
-   - **Faixa 500-700**: Maior dispersão, representando a "zona de agregação de valor" das instituições
-
-4. **Implicações**:
-   - ENEM_NT_MT é um **preditor relevante**, mas **não determinístico**
-   - Modelos de regressão simples podem capturar parte da relação, mas modelos multivariados serão necessários
-   - A dispersão sugere oportunidade para identificar **instituições de alto valor agregado**
+   - A dispersão vertical é grande em todas as faixas de nota do ENEM: estudantes com a mesma nota de ingresso obtêm notas gerais que variam de cerca de 20 a 80 pontos
+   - A nota de Matemática é um preditor relevante, mas insuficiente sozinho; outros fatores (demais áreas do ENEM, curso, instituição) precisam ser incorporados ao modelo
+   - A diferença entre o desempenho previsto pela reta e o observado é justamente o tipo de variação que o IDD interpreta como valor agregado
+   - O ponto isolado em x = 0 corresponde novamente a uma nota zero no ENEM
 
 #### 4.1.5 Matriz de Correlação
 
-**Figura 4: Matriz de Correlação entre Variáveis Numéricas**
+**Figura 4: Matriz de Correlação de Pearson entre as Variáveis Numéricas**
 
-![Matriz de Correlação](outputs/matriz_correlacao.png)
+![Matriz de Correlação](https://github.com/Lucaslust/TrabalhoCienciasDeDados/raw/main/outputs/matriz_correlacao.png)
 
 **Interpretação da Matriz de Correlação**:
 
-1. **Correlações Fortes Identificadas** (|r| > 0.7):
-   - **Entre notas do ENEM**: Correlações moderadas a fortes entre todas as áreas
-     - ENEM_NT_CN ↔ ENEM_NT_MT: r ≈ 0.75
-     - ENEM_NT_CH ↔ ENEM_NT_LC: r ≈ 0.70
-   - **Multicolinearidade**: Presença de correlações altas entre preditores requer atenção
+1. **Correlações com NT_GER** (variável-alvo):
+   - **ENEM_NT_LC**: r = 0,52
+   - **ENEM_NT_CN**: r = 0,50
+   - **ENEM_NT_CH**: r = 0,50
+   - **ENEM_NT_MT**: r = 0,44
+   - Linguagens é o preditor individual mais forte e Matemática o mais fraco, embora a diferença entre eles seja pequena
+   - Nenhuma correlação ultrapassa 0,52, indicando que o desempenho no ingresso explica apenas parte da nota geral, o que é coerente com a proposta do IDD
 
-2. **Correlações com NT_GER** (variável alvo):
-   - **ENEM_NT_MT**: r ≈ 0.45-0.55 (correlação positiva moderada)
-   - **ENEM_NT_CN**: r ≈ 0.40-0.50
-   - **ENEM_NT_CH**: r ≈ 0.35-0.45
-   - **ENEM_NT_LC**: r ≈ 0.30-0.40
-   - **Matemática** emerge como o preditor individual mais forte
+2. **Correlações entre Preditores**:
+   - As notas do ENEM são fortemente correlacionadas entre si (r entre 0,61 e 0,72; os maiores valores são CN ↔ MT e CH ↔ LC, ambos 0,72), caracterizando multicolinearidade
+   - A correlação mais alta da matriz é entre `ANO_INICIO_GRAD` e `ANO_ENEM` (r = 0,93), esperada porque a maioria dos estudantes ingressa logo após o ENEM; essas duas variáveis são praticamente redundantes
+   - Os anos de ingresso quase não se correlacionam com `NT_GER` (r = -0,05 e -0,01)
+   - `NU_ANO` aparece sem valores porque é constante e sua correlação não é definida
 
-3. **Padrões Observados**:
-   - **Todas as correlações com NT_GER são positivas**: Confirma que melhor desempenho no ENEM está associado a melhor desempenho no IDD
-   - **Correlações moderadas** (não muito altas): Indicam que o IDD captura aspectos além do conhecimento de entrada
-   - **Estrutura de correlação entre ENEM**: Reflete habilidades cognitivas gerais compartilhadas
+3. **Área do Curso**:
+   - `CO_GRUPO` apresenta correlação de -0,28 com `NT_GER`. Por ser um código, esse valor não deve ser interpretado diretamente, mas sugere que a área do curso está associada ao desempenho e deve ser incluída no modelo como variável categórica
 
 4. **Implicações para Modelagem**:
-   - **Feature Engineering**: Considerar criar variável "média ENEM" para capturar habilidade geral
-   - **Seleção de Features**: Técnicas de regularização (Lasso, Ridge) podem ajudar a lidar com multicolinearidade
-   - **Modelos Ensemble**: Random Forest e Gradient Boosting podem lidar bem com variáveis correlacionadas
-   - **PCA**: Análise de Componentes Principais pode ser útil para redução de dimensionalidade
+   - Criar uma média das notas do ENEM
+   - Manter apenas um dos dois anos (ou derivar o intervalo entre eles)
+   - Usar regularização (Ridge, Lasso) ou comitês baseados em árvores, que lidam bem com atributos correlacionados
+   - Avaliar a Análise de Componentes Principais (PCA)
 
 #### 4.1.6 Análise de Variáveis Categóricas
 
-**Figura 5: Distribuição de Variáveis Categóricas**
+**Figura 5: Frequência das Categorias das Variáveis Categóricas**
 
-![Variáveis Categóricas](outputs/variaveis_categoricas.png)
+![Variáveis Categóricas](https://github.com/Lucaslust/TrabalhoCienciasDeDados/raw/main/outputs/variaveis_categoricas.png)
 
 **Interpretação das Variáveis Categóricas**:
 
 1. **CO_MODALIDADE (Modalidade do Curso)**:
-   - Distribuição entre cursos **presenciais** e **EAD** (Educação a Distância)
-   - Permite comparar desempenho entre modalidades
-   - Relevante para políticas de expansão e qualidade da EAD
+   - 238.682 estudantes (95,9%) na categoria 1 e apenas 10.207 (4,1%) na categoria 0, que segundo o dicionário do INEP correspondem a cursos presenciais e a distância, respectivamente
 
-2. **CO_CATEGAD (Categoria Administrativa)**:
-   - Distribuição entre instituições **públicas** e **privadas**
-   - Diferentes categorias: federal, estadual, municipal, privada
-   - Importante para análises comparativas de desempenho por tipo de IES
+2. **CO_ORGACAD (Organização Acadêmica)**:
+   - 10028 (Universidade): 130.541 estudantes (52,4%)
+   - 10020 (Centro Universitário): 70.536
+   - 10022 (Faculdade): 36.949
+   - 10026 (Instituto Federal): 9.781
+   - 10019 (CEFET): 1.082
 
-3. **CO_ORGACAD (Organização Acadêmica)**:
-   - Universidades, Centros Universitários, Faculdades, IFs
-   - Cada categoria tem características e missões distintas
-   - Permite avaliar agregação de valor por tipo de organização
+3. **CO_CATEGAD (Categoria Administrativa)**:
+   - Categoria 4 é a mais frequente (101.242), seguida das categorias 1 (62.945), 5 (42.819), 8 (22.356) e 2 (16.203)
+   - As categorias 3 (2.179) e 7 (1.145) são raras
 
-4. **Distribuição Geográfica (CO_MUNIC_CURSO)**:
-   - Alta diversidade de municípios representados
-   - Permite análises regionais de desempenho
-   - Identificação de desigualdades geográficas
+4. **Variáveis Constantes**:
+   - `TP_INSCRICAO` (sempre 1), `IN_REGULAR` (sempre 1) e `TP_INSCRICAO_ADM` (sempre 0) não variam em toda a base
+   - Somadas a `NU_ANO`, são quatro atributos sem variabilidade, que não contribuem para a previsão e devem ser removidos, reduzindo o conjunto útil a 15 atributos
 
-5. **Implicações**:
-   - **Encoding necessário**: Transformar variáveis categóricas para modelagem (One-Hot Encoding, Label Encoding)
-   - **Análise de grupos**: Possibilidade de análises estratificadas por categoria
-   - **Features importantes**: Categoria administrativa e modalidade podem ser preditores relevantes
+5. **Implicações para Modelagem**:
+   - O desbalanceamento implica poucos exemplos de cursos EAD e de categorias administrativas raras, o que pode reduzir a qualidade das previsões nesses grupos e deve ser considerado na divisão dos dados (por exemplo, com amostragem estratificada)
+   - Variáveis com poucas categorias podem ser codificadas por One-Hot Encoding; as de alta cardinalidade (`CO_IES`, `CO_CURSO`, `CO_MUNIC_CURSO`) exigirão técnicas como Target Encoding
 
-#### 4.1.7 Principais Insights da Análise Exploratória
+#### 4.1.7 Síntese da Análise Exploratória
 
-**Qualidade dos Dados**:
-- ✓ Dataset **completo** (0% missing values)
-- ✓ **248.889 registros** de estudantes de todo o Brasil
-- ✓ **19 variáveis** bem documentadas e estruturadas
-- ✓ Alta qualidade dos dados do INEP
-
-**Variável Alvo (NT_GER)**:
-- Distribuição aproximadamente **normal** com média ~50
-- Grande **variabilidade** (desvio padrão ~15), indicando diversidade de desempenhos
-- Adequada para **modelagem de regressão**
-
-**Preditores Principais**:
-- **Notas do ENEM**: Preditores mais relevantes identificados
-  - Correlação moderada com NT_GER (r = 0.30 a 0.55)
-  - Matemática é o preditor individual mais forte
-- **Características institucionais**: Modalidade, categoria administrativa, organização acadêmica
-- **Temporais**: Ano de início, tempo de curso
-
-**Relações Importantes**:
-- **Relação linear positiva** entre notas ENEM e NT_GER
-- **Multicolinearidade** entre variáveis ENEM requer tratamento
-- **Dispersão significativa** sugere que fatores institucionais/pedagógicos são importantes
-
-**Desafios Identificados**:
-- **Outliers**: Presentes em todas as variáveis, requerem tratamento cuidadoso
-- **Multicolinearidade**: Entre variáveis ENEM
-- **Desbalanceamento**: Possível desbalanceamento entre categorias de variáveis categóricas
-
-**Oportunidades**:
-- **Segmentação**: Identificar perfis de estudantes e instituições
-- **Valor agregado**: Avaliar quais instituições agregam mais valor
-- **Modelagem preditiva**: Alto potencial para modelos de regressão
-- **Políticas públicas**: Insights para melhoria da educação superior
-
----
-
-## Próximos Passos (Sprints Futuras)
-
-### Sprint 2: Pré-processamento e Feature Engineering
-- Tratamento de outliers (winsorização, transformação)
-- Normalização/padronização de variáveis numéricas
-- Encoding de variáveis categóricas (One-Hot, Target Encoding)
-- Criação de novas features:
-  - Média das notas ENEM
-  - Tempo de curso (2023 - ANO_INICIO_GRAD)
-  - Gap temporal (ANO_INICIO_GRAD - ANO_ENEM)
-  - Indicadores geográficos (região, porte do município)
-
-### Sprint 3: Modelagem Preditiva
-- Definição clara do problema (regressão: prever NT_GER)
-- Split dos dados (treino/validação/teste)
-- Modelos baseline:
-  - Regressão Linear
-  - Regressão Ridge/Lasso
-- Modelos avançados:
-  - Random Forest Regressor
-  - Gradient Boosting (XGBoost, LightGBM, CatBoost)
-  - Redes Neurais (MLP)
-- Validação cruzada
-- Tuning de hiperparâmetros
-
-### Sprint 4: Avaliação e Interpretação
-- Métricas de avaliação (RMSE, MAE, R²)
-- Análise de resíduos
-- Feature importance
-- SHAP values para interpretabilidade
-- Comparação de modelos
-- Seleção do modelo final
+- **Qualidade dos dados**: não há valores ausentes declarados, mas existem notas iguais a zero no ENEM que provavelmente representam dados inválidos, e quatro atributos constantes (`NU_ANO`, `TP_INSCRICAO`, `IN_REGULAR`, `TP_INSCRICAO_ADM`)
+- **Variável-alvo**: `NT_GER` tem distribuição aproximadamente normal e simétrica (média 50,64; mediana 50,60), com pouquíssimos outliers, adequada à modelagem por regressão
+- **Preditores**: as notas do ENEM têm correlação moderada com a nota geral (r de 0,44 a 0,52), com Linguagens como a mais forte; a área do curso também parece associada ao desempenho
+- **Desafios**: multicolinearidade entre as notas do ENEM e entre os dois anos de ingresso (r = 0,93), forte desbalanceamento das variáveis categóricas (95,9% de cursos presenciais) e códigos de alta cardinalidade
+- **Oportunidades**: a grande variação da nota geral entre estudantes com o mesmo perfil de ingresso indica espaço para identificar fatores de curso e instituição que agregam valor, objetivo das próximas sprints
 
 ---
 
