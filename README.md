@@ -1,3 +1,4 @@
+[README.md](https://github.com/user-attachments/files/32870960/README.md)
 # Projeto de Ciência de Dados - IDD 2023
 
 ## Descrição do Projeto
@@ -13,7 +14,7 @@ Análise exploratória e modelagem dos microdados do **IDD (Indicador de Diferen
 - **Formato**: Arquivo TXT delimitado por ponto e vírgula (;)
 
 > O arquivo de dados brutos (`Microdados_idd_2023/2.DADOS/MICRODADOS_IDD_2023_LGPD.txt`, 21 MB) não é versionado neste repositório.
-> Baixe os microdados do IDD 2023 no portal do INEP (https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos/microdados) e extraia o arquivo nesse caminho antes de rodar as análises.
+> Baixe os microdados do IDD 2023 no portal do INEP (<https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos/microdados>) e extraia o arquivo nesse caminho antes de rodar as análises.
 
 ## Estrutura do Projeto
 
@@ -38,16 +39,18 @@ pip install -r requirements.txt
 ## Sprint 1 - Análise Exploratória
 
 ### Objetivos
+
 - Carregar e compreender a base de dados
 - Realizar análise descritiva completa
 - Criar visualizações (histogramas, boxplots, scatter plots, matriz de correlação)
 - Identificar padrões, relações e possíveis problemas nos dados
 
 ### Entregas
+
 1. Código da análise exploratória (disponível no GitHub)
 2. Gráficos e visualizações com interpretações
 3. Relatório seguindo o modelo fornecido (Seção 3 e Seção 4 - Parte 1)
-4. Quadro Kanban no Trello
+4. Quadro Kanban no Trello: <https://trello.com/b/3T9P3SFB/trabalho-ciencia-de-dados>
 
 ## Oportunidades de Modelagem Preditiva
 
@@ -150,7 +153,14 @@ Os microdados do IDD 2023 oferecem diversas oportunidades para desenvolvimento d
 
 ## Equipe
 
-[Adicionar nomes dos membros da equipe]
+- Lucas Lustosa
+- Yan Lemos
+- Francisco Ricardo
+- Luis Eduardo
+
+## Gerenciamento do Projeto
+
+Quadro Kanban no Trello: <https://trello.com/b/3T9P3SFB/trabalho-ciencia-de-dados>
 
 ## Período de Desenvolvimento
 
